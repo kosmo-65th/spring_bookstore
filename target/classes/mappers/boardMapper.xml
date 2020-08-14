@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="spring.project.bookshop4.persistence.BoardDAO">
+	<select id="boardCnt" resultType="int"> 
+		SELECT count(*) as cnt FROM board
+	</select>
+	
+	<select id="searchBoardCnt" parameterType="String" resultType="int" >
+		SELECT count(*) as cnt FROM board WHERE writer LIKE '%'||#{search}||'%' OR title LIKE '%'||#{search}||'%' OR content LIKE '%'||#{search}||'%'
+	</select>
+	
+	<select id="getBoardList" parameterType="java.util.Map" resultType="spring.project.bookshop4.vo.BoardVO"> 
+		<![CDATA[
+		SELECT * FROM( SELECT BOARDNUM, WRITER, TITLE, CONTENT, LOCKB, RE, WRITEDATE, VIEWCOUNT, RE_CONTENT, RE_WRITEDATE, ROWNUM rNum 
+		FROM ( SELECT b.BOARDNUM, b.WRITER, b.TITLE, b.CONTENT, b.LOCKB, b.RE, b.WRITEDATE, b.VIEWCOUNT, r.RE_CONTENT, r.RE_WRITEDATE FROM board b, re_board r WHERE b.boardNum = r.boardNum(+) ORDER BY b.BOARDNUM DESC) )  
+		WHERE rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select> 
+	
+	
+	<select id="searchBoardList" parameterType="java.util.Map" resultType="spring.project.bookshop4.vo.BoardVO"> 
+		<![CDATA[
+		SELECT * FROM( SELECT BOARDNUM, WRITER, TITLE, CONTENT, LOCKB, RE, WRITEDATE, VIEWCOUNT, RE_CONTENT, RE_WRITEDATE, ROWNUM rNum 
+		FROM ( SELECT b.BOARDNUM, b.WRITER, b.TITLE, b.CONTENT, b.LOCKB, b.RE, b.WRITEDATE, b.VIEWCOUNT, r.RE_CONTENT, r.RE_WRITEDATE FROM board b, re_board r WHERE b.boardNum = r.boardNum(+) AND 
+		(writer LIKE '%'||#{search}||'%' OR title LIKE '%'||#{search}||'%' OR content LIKE '%'||#{search}||'%') ORDER BY b.BOARDNUM DESC) )  
+		WHERE rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select> 
+
+	<select id="getBoard" parameterType="int" resultType="spring.project.bookshop4.vo.BoardVO" >
+		SELECT b.BOARDNUM, b.WRITER, b.TITLE, b.CONTENT, b.LOCKB, b.RE, b.WRITEDATE, b.VIEWCOUNT, r.RE_CONTENT, r.RE_WRITEDATE 
+		FROM board b, re_board r 
+		WHERE b.boardNum = r.boardNum(+) AND b.boardNum=#{boardNum}
+	</select>
+
+	<update id="reUpdate" parameterType="java.util.Map">
+		UPDATE re_board SET re_content=#{re_content}, re_writeDate=sysdate WHERE boardNum=#{boardNum} 
+	</update>
+
+	<delete id="boardReDel" parameterType="int">
+		DELETE re_board WHERE boardNum=#{boardNum} 
+	</delete>
+	
+	<update id="updateRe" parameterType="java.util.Map">
+		UPDATE board SET re=#{re} WHERE boardNum=#{boardNum} 
+	</update>
+
+	<delete id="boardDel" parameterType="int">
+		DELETE board WHERE boardNum=#{boardNum} 
+	</delete>
+	
+	<insert id="makeRe" parameterType="java.util.Map">
+		INSERT INTO re_board(BOARDNUM, RE_CONTENT) VALUES (#{boardNum}, #{re_content})
+	</insert>
+	
+</mapper>

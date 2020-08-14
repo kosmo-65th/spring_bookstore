@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+/* ----------------- 공통 ----------------- */
+
+/* 레이아웃 */
+.contants_area.mypage {margin-top:50px;}
+.contants_area.mypage .contents_box {display:table; position:relative; min-height:300px; width:100%;padding:25px 20px;}
+.contants_area.mypage .contents_box .more {position:absolute; top:-36px; right:10px;}
+.contants_area.mypage .contents_box .more a {font-size:11px; color:#777; text-decoration:none;}
+.contants_area.mypage .contents_box .more a:hover {text-decoration:underline;}
+.contants_area.mypage .contents_box .more span {padding:0 0 2px 5px; font-size:9px; font-weight:400; color:#999; vertical-align:middle;}
+
+.contants_area.mypage .wrap_cart_end {overflow:hidden; margin:1px 0 0; padding:20px 30px; background:#fff; border:1px solid #d2d2d2;}
+
+.contants_area.mypage .pagination {margin:0;}
+.contants_area.mypage .space_line {margin:0; padding:20px 0 0; border-top:1px solid #eaeaea; border-bottom:none;}
+
+.contants_area.mypage .btn_defualt {margin:20px auto;}
+/* //레이아웃 */
+
+/* 타이틀 */
+.mypage strong {font-weight:600;}
+/* //타이틀 */
+
+.mypage .top_txt {margin:20px 0 7px; font-size:13px;}
+
+/* ----------------- //공통 ----------------- */
+
+/* ---------contents box----------------- */
+.contents_box {position:relative; width:100%; padding:20px 20px 40px; background:#fff; border:1px solid #f3f3f3;margin:30px;}
+.contents_box.no_bd {border-top:0;}
+.submain_box {position:relative;}
+.submain_box h2 {margin:19px 0 5px 10px; font-size:17px; font-weight:600; color:#222;}
+.submain_box .more {position:absolute; top:0px; right:10px;}
+.submain_box .more a {font-size:11px; color:#777; text-decoration:none;}
+.submain_box .more a:hover {text-decoration:underline;}
+.submain_box .more span {padding:0 0 2px 5px; font-size:9px; font-weight:400; color:#999; vertical-align:middle;}
+/*-------------------------------------  */
+
+/* -------------------Edit------------------ */
+#lnb_area{
+	position : relative;
+	margin-top:20px;
+}
+#userID{
+	color:#b068ec;
+}
+ 
+.contents_box table thead th{border-bottom:1px solid black;}
+.contents_box table tbody img{float:left;	width:140px;	height:140px; margin-right:15px;}
+.contents_box table tbody td{text-align:center; padding:10px;}
+.bookInfo .bookTitle{font-size:20px; font-weight:bold;}
+
+
+
+
+

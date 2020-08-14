@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="spring.project.bookshop4.persistence.BookDAO">
+	<resultMap type="java.util.Map" id="selectMapList"> 
+		<result column="bookclass" property="bookClass"/> 
+		<result column="classname" property="className"/> 
+	</resultMap>
+	
+	<select id="getBookClass" resultMap="selectMapList"> 
+		SELECT bookclass, classname FROM classbook order by bookclass 
+	</select> 
+	
+	
+	
+	<select id = "getNewBook" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[	
+		SELECT * FROM (SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM (SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, VISION 
+					FROM stock WHERE bookCount >0 ORDER BY PUBLISHDATE DESC) ) 
+		WHERE rNum>=1 and rNum<=10
+		]]>
+	</select>
+		
+	<select id = "getBestBook" parameterType="String" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[	
+		SELECT * FROM (SELECT sum,  ISBN, bookClass, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+	    	FROM(SELECT o.sum, o.ISBN, s.bookclass, s.BOOKNAME, s.BOOKWRITER, s.BOOKPUBLISHER, s.PUBLISHDATE, s.BOOKIMAGE, s.BOOKPRICE, s.SALE, s.PAGE, s.BOOKCOUNT 
+	    		FROM ( SELECT SUM(count) AS sum, ISBN FROM ordering 
+	    				WHERE status=3 OR status=4 OR status=6 GROUP BY ISBN ORDER BY sum DESC) o, stock s 
+	    		WHERE o.ISBN = s.ISBN) 
+	    	WHERE bookClass LIKE #{searchBookClass}||'%' AND bookCount>0) 
+		WHERE  rNum >=1 and rNum<=5
+		]]>
+	</select>
+	
+	<select id = "getGoodPriceBook" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[	
+		SELECT * FROM (SELECT o.ISBN, s.BOOKNAME, s.BOOKWRITER, s.BOOKPUBLISHER, s.PUBLISHDATE, s.BOOKCLASS, s.BOOKIMAGE, s.BOOKPRICE, s.SALE, s.PAGE, s.BOOKCOUNT, o.rNum 
+		FROM (SELECT ISBN, ROWNUM rNum 
+		FROM (SELECT ISBN, bookprice-sale as discount FROM Stock WHERE bookCount>0 ORDER BY discount desc) ) 
+		o, stock s 
+		WHERE o.ISBN = s.ISBN) 
+		WHERE rNum>=1 and rNum<=10 
+		ORDER BY rNum
+		]]>
+	</select>		
+		
+	<select id = "searchStockBook" parameterType="String" resultType ="spring.project.bookshop4.vo.BookVO">
+		SELECT * FROM stock WHERE ISBN = #{search}
+	</select>	
+	
+	<select id = "bookListCnt" resultType ="int">
+		SELECT count(*) as cnt FROM stock WHERE vision=1
+	</select>
+	
+	<select id = "searchStockCnt" parameterType="String" resultType ="int">
+		SELECT count(*) as cnt FROM stock WHERE vision=1 AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%') 
+	</select>	
+
+	<select id = "getList" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[	
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE vision=1 
+			ORDER BY ISBN DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "searchStockList" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[	
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE vision=1 AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%')  
+			ORDER BY ISBN DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchCnt1" parameterType="String" resultType ="int">
+		SELECT count(*) as cnt FROM stock WHERE ISBN=#{search, jdbcType=VARCHAR} OR BOOKNAME LIKE '%'||#{search, jdbcType=VARCHAR}||'%' OR BOOKWRITER LIKE '%'||#{search, jdbcType=VARCHAR}||'%' OR BOOKPUBLISHER LIKE '%'||#{search, jdbcType=VARCHAR}||'%' 
+	</select>
+	
+	<select id = "bookSearchCnt2" parameterType="java.util.Map" resultType ="int">
+		SELECT count(*) as cnt FROM stock WHERE bookClass LIKE #{category}||'%'  AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%')
+	</select>
+	
+	<select id = "bookSearch1" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' 
+			ORDER BY ISBN DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearch2" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE bookClass LIKE #{category}||'%'  AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' ) 
+			ORDER BY ISBN DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchRecent1" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%'  
+			ORDER BY PublishDate DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchRecent2" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE bookClass LIKE #{category}||'%'  AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%'  ) 
+			ORDER BY publishDate DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchLow1" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' 
+			ORDER BY sale) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	
+	<select id = "bookSearchLow2" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE bookClass LIKE #{category}||'%'  AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' ) 
+			ORDER BY sale) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchHigh1" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' 
+			ORDER BY sale DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+	
+	<select id = "bookSearchHigh2" parameterType="java.util.Map" resultType ="spring.project.bookshop4.vo.BookVO">
+		<![CDATA[
+			SELECT * 
+			FROM(SELECT ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, ROWNUM rNum 
+			FROM ( SELECT * FROM Stock WHERE bookClass LIKE #{category}||'%'  AND (ISBN=#{search} OR BOOKNAME LIKE '%'||#{search}||'%' OR BOOKWRITER LIKE '%'||#{search}||'%' OR BOOKPUBLISHER LIKE '%'||#{search}||'%' ) 
+			ORDER BY sale DESC) ) 
+			WHERE  rNum >=#{start} and rNum<=#{end}
+		]]>
+	</select>
+		
+		
+	<update id = "buybook" parameterType="java.util.Map">
+		UPDATE stock SET bookcount = bookcount-#{count} WHERE ISBN=#{ISBN}
+	</update>	
+		
+	<update id="updateStock" parameterType ="spring.project.bookshop4.vo.BookVO">
+	UPDATE stock SET BOOKNAME=#{bookName}, BOOKWRITER=#{bookWriter}, BOOKPUBLISHER=#{bookPublisher}, PUBLISHDATE=#{publishDate}, 
+		BOOKCLASS=#{bookClass}, BOOKIMAGE=#{bookImage}, BOOKPRICE=#{bookPrice}, SALE=#{sale}, PAGE=#{page}, BOOKCOUNT=#{bookCount} 
+	WHERE ISBN = #{ISBN}
+	</update>	
+	
+	<insert id="add" parameterType="java.util.Map">
+		INSERT INTO stock (ISBN, BOOKNAME, BOOKWRITER, BOOKPUBLISHER, PUBLISHDATE, BOOKCLASS, BOOKIMAGE, BOOKPRICE, SALE, PAGE, BOOKCOUNT, VISION) 
+		VALUES(#{ISBN}, #{bookName}, #{bookWriter}, #{bookPublisher}, #{publishDate}, #{bookClass}, #{bookImage}, #{bookPrice}, #{sale}, #{page}, #{bookCount}, #{vision})
+	</insert>
+		
+	<delete id="deleteBook" parameterType="String">
+		DELETE FROM stock WHERE ISBN=#{ISBN}
+	</delete>
+</mapper>

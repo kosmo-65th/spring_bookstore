@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+#headSpace{
+	margin: 190px;/* 190 */
+}
+#bookHead{
+	border: 1px solid white;
+	border-top-left-radius:20px;
+    border-top-right-radius:20px;
+	background:white;
+	padding:30px;
+}
+#bookHead h1{
+	margin:12px 0;
+}
+#bookHead span{
+	margin:10px 20px 20px 0;
+}
+#bookBody{
+	border: 1px solid white;
+	border-bottom-left-radius:30px;
+    border-bottom-right-radius:30px;
+	background:white;
+	padding: 0 30px;
+	margin-bottom:30px;
+}
+#bookBody:after {content:""; display:block; clear:both;}
+#bookBody img{
+	width:500px;
+	height:740px;
+	float:left;
+	margin:0 40px 40px 0;
+}
+#bookBody table td{
+	font-size:25px;
+	padding:20px;
+}
+#bookBody table th{
+	text-align:left;
+	font-size:25px;
+	padding:20px;
+}
+
+#bookBody table td tr:first{
+	font-size:50px;
+	padding:20px;
+}
+#bookBody table td strong{
+	color : red;
+	font-size:15px;
+}
+#bookButton{
+	align:center;
+}
+#bookBody table .btn_Red{
+	padding:6px 25px 8px !important; background:#99072b; border:1px solid #99072b; font-size:20px; color:#fff; line-height:160%; transition:all .1s;}
+}
+#bookBody table .btn_Red:hover {
+	background:#660010; border:1px solid #660010; transition:all .1s;
+}
+#bookBody table .btn_Orange{
+	padding:6px 25px 8px !important; background:#e21d85; border:1px solid #e21d85; font-size:20px; color:#fff; line-height:160%; transition:all .1s;}
+}
+#bookBody table .btn_Orange:hover {
+	background:#971358; border:1px solid #971358; transition:all .1s;
+}
+
+#container_member {position:relative; width:1200px; margin:20px auto 0; padding-top:50px; z-index:0;}
+#container_member .history_menu {left:inherit; right:0; margin:0; padding:0; height:inherit;}
+#container_member .history_menu li {position:relative; float:left; margin:20px 20px 0 36px; font-size:12px; color:#222; line-height:230%; list-style:none; cursor:inherit;}
+#container_member .history_menu li div {margin:5px; padding:0; background:none; border:0; line-height:160%;}
+#container_member .history_menu li div strong {font-weight:normal;}
+#container_member .history_menu li div span {position:absolute; top:8px; right:-24px; width:8px; height:12px; background:url(icon/icon_history_arrow.png) no-repeat; text-indent:-99999px;}
+#container_member .history_menu li:hover div {border:0;}
+#container_member .history_menu li:hover i {border-top:0;}	

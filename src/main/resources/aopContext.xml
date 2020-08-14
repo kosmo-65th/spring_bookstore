@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+	<!-- 
+	component-scan의 역할은 스프링에서 자동적으로 스테레오 타입의 어노테이션을 등록해주는 역할은 한다. 
+우리는 @Controller, @Service, @Repository, @Component 라는 어노테이션을 사용했었다. 
+단순히 이러한 어노테이션을 붙이기만 해도 각각 Controller, Service, DAO의 역할을 할 수 있었던 이유가 component-scan을 통해서 스프링이 자동적으로 bean을 등록시켜줌으로써 그 기능을 했던 것이다. 
+이것이 우리가 Controller, Service, DAO 또는 FileUtils와 같은 Component를 생성을 하지 않고서도 사용할 수 있었던 이유이다. 
+만약 component-scan을 하지 않았다면, Controller, Service, DAO를 생성할 때 마다 xml 파일에 작성해야지만 사용할 수 있다. 굉장히 비효율적인 일이 아닐수가 없다. 
+그런데 여기서 use-default-filters="false"라는 값을 주게되면 이와 같은 어노테이션을 자동으로 검색하지 않겠다는 뜻이 된다. 
+그리고 <context:include-filter> 태그에 해당하는 어노테이션만 검색하고 bean을 등록시켜 준다. 여기서는 Controller 어노테이션만 검색을 한 것이다. 
+	 -->
+</beans>

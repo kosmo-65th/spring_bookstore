@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+a{text-decoration:none;}
+ul{list-style:none;}
+
+#host_container{position:relative; overflow:hidden; width:1150px; margin:20px auto 0; z-index:0;}
+#host_container .history_menu {left:inherit; right:0; margin:0; padding:0; height:inherit;}
+#host_container .history_menu li {position:relative; float:left; margin:5px 0 0 36px; font-size:12px; color:#222; line-height:230%; list-style:none; cursor:inherit;}
+#host_container .history_menu li div {margin:5px; padding:0; background:none; border:0; line-height:160%;}
+#host_container .history_menu li div strong {font-weight:normal;}
+#host_container .history_menu li div span {position:absolute; top:8px; right:-24px; width:8px; height:12px; background:url(icon/icon_history_arrow.png) no-repeat; text-indent:-99999px;}
+#host_container .history_menu li:hover div {border:0;}
+#host_container .history_menu li:hover i {border-top:0;}
+/* 버튼 */
+#host_container .btn_White {padding:6px 25px 8px !important; background:#fff; border:1px solid #aaa; font-size:13px; color:#333; line-height:160%; transition:all .1s;}
+#host_container .btn_White:hover {background:#555; border:1px solid #444; color:#fff; transition:all .1s;}
+#host_container .btn_Gray {padding:6px 25px 8px !important; background:#fafafa; border:1px solid #bbb; font-size:13px; color:#333; line-height:160%; transition:all .1s;}
+#host_container .btn_Gray:hover {background:#555; border:1px solid #444; color:#fff; transition:all .1s;}
+#host_container .btn_Red {padding:6px 25px 8px !important; background:#99072b; border:1px solid #99072b; font-size:13px; color:#fff; line-height:160%; transition:all .1s;}
+#host_container .btn_Red:hover {background:#660010; border:1px solid #660010; transition:all .1s;}
+/* input */
+#host_container .input_box {margin:0; padding:40px;}
+#host_container .input_box .tit {margin:17px 0 0 10px;}
+#host_container .input_box .i_inputs {padding:0 0 0 200px;}
+#host_container .input_box .i_input_txt {padding:0 0 0 200px;}
+#host_container .contants_area {float:inherit; width:1100px; margin:40px auto 60px;}
+#host_container .contants_area h3 {margin:0; padding:0 0 10px 10px; font-size:16px; font-weight:600;}
+#host_container .contants_area .txt {font-size:13px; line-height:170%;}
+#host_container .contants_area .txt a {text-decoration:none;}
+#host_container .contants_area .txt a:hover {text-decoration:underline;}
+#host_container .contants_area .txt strong {font-weight:600;}
+/* 메뉴 밑줄 */
+#host_container .head {position:relative; width:100%; padding-bottom:10px; border-bottom:2px solid #dfdfdf; z-index:0;}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="spring.project.bookshop4.persistence.OrderDAO">
+	<select id = "shoppingCartCheck" parameterType="java.util.Map" resultType ="int">
+		SELECT count(*) FROM shoppingCart WHERE ISBN=#{ISBN} AND ID =#{id}
+	</select>	
+
+	<insert id = "shoppingCartAdd" parameterType="java.util.Map">
+		INSERT INTO shoppingCart(CARTNUM, ISBN, ID, COUNT) VALUES (shoppingCart_seq.nextval, #{ISBN}, #{id}, #{count})
+	</insert>
+
+	<insert id = "buyBookPro" parameterType="java.util.Map">
+		INSERT INTO ordering(ORDERNUM, ISBN, ID, PRICE, COUNT, ORDERDATE) 
+		VALUES(order_seq.nextval, #{ISBN}, #{id}, #{price} ,#{count} , sysdate)
+	</insert>
+	
+	<delete id = "deleteFromCart" parameterType="java.util.Map">
+	DELETE FROM shoppingCart
+	where ID = #{id} AND ISBN=#{ISBN}
+	</delete>
+	
+	<select id="getShoppingCartList" parameterType="String" resultType="spring.project.bookshop4.vo.OrderVO">
+		SELECT s.CARTNUM as orderNum, s.ISBN, s.ID, s.COUNT, k.bookcount as maxCount, k.bookName, k.bookWriter, k.bookPublisher, k.bookImage, k.BookPrice as price 
+		FROM shoppingCart s, stock k 
+		WHERE ID =#{id} AND s.ISBN = k.ISBN
+	</select>
+	
+	<select id="getOrderList" parameterType="String" resultType="spring.project.bookshop4.vo.OrderVO">
+		SELECT o.orderdate, s.bookimage, s.bookname, s.bookwriter, s.bookpublisher, o.price, o.count , o.status 
+		FROM ordering o, stock s 
+		WHERE o.ISBN = s.ISBN AND o.id=#{id}
+	</select>
+	
+	<select id="resultMonthly" resultType="int">
+	SELECT NVL(SUM(price * count),0) as SUM 
+	FROM ordering WHERE COMPLETEDATE LIKE TO_CHAR(systimestamp, 'YY/MM')||'%'
+	</select>
+	
+	<select id="resultYearly" resultType="int">
+	SELECT NVL(SUM(price * count),0) as SUM 
+	FROM ordering WHERE COMPLETEDATE LIKE TO_CHAR(systimestamp, 'YY')||'%'
+	</select>
+	
+	<select id="resultMonthlyCnt" resultType="int">
+	SELECT count(*) as CNT 
+	FROM ordering 
+	WHERE COMPLETEDATE LIKE TO_CHAR(systimestamp, 'YY/MM')||'%'
+	</select>
+	
+	<select id="resultYearlyCnt" resultType="int">
+	SELECT count(*) as CNT 
+	FROM ordering 
+	WHERE COMPLETEDATE LIKE TO_CHAR(systimestamp, 'YY')||'%'
+	</select>
+	
+	<select id="graphMonthly" parameterType="String" resultType="int">
+	SELECT NVL(SUM(price * count),0) as SUM 
+	FROM ordering 
+	WHERE status IN ('3','4','6') AND COMPLETEDATE LIKE #{month}||'%'
+	</select>
+	
+	<select id="commonOrderCnt" parameterType="String" resultType="int">
+		SELECT count(*) as cnt FROM ordering WHERE STATUS=#{status}
+	</select>
+	
+	<select id="commonSearchOrderCnt" parameterType="java.util.Map" resultType="int">
+		SELECT count(*) as cnt FROM customer WHERE status=#{status} and (ID LIKE '%'||#{search}||'%' OR NAME LIKE '%'||#{search}||'%' OR ISBN = #{search})
+	</select>
+	
+	<select id="commonGetOrderList" parameterType="java.util.Map" resultType="spring.project.bookshop4.vo.OrderVO">
+	<![CDATA[
+	SELECT * 
+	FROM(SELECT ORDERNUM, ISBN ,ID , PRICE, COUNT, ORDERDATE, COMPLETEDATE, DELIVER, STATUS, ROWNUM rNum 
+	FROM ( SELECT * FROM ordering WHERE status IN 
+	]]>
+		
+		
+		<foreach collection="status" item="it"  open="(" close=")" separator=",">
+	        #{it}
+	    </foreach>
+	<![CDATA[
+	ORDER BY ORDERNUM DESC) ) 
+	WHERE  rNum >=#{start} and rNum<=#{end}
+	]]>
+	</select>
+	
+	<select id="commonSearchOrderList" parameterType="java.util.Map" resultType="spring.project.bookshop4.vo.OrderVO">
+	<![CDATA[
+	SELECT * 
+	FROM(SELECT ORDERNUM, ISBN ,ID , PRICE, COUNT, ORDERDATE, COMPLETEDATE, DELIVER, STATUS, ROWNUM rNum 
+	FROM ( SELECT * FROM ordering WHERE status IN 
+	]]>
+		<foreach collection="status" item="it"  open="(" close=")" separator=",">
+	        #{it}
+	    </foreach>
+	<![CDATA[
+	AND (ID LIKE '%'||#{search}||'%' OR NAME LIKE '%'||#{search}||'%' OR ISBN = #{search}) 
+	ORDER BY ORDERNUM DESC) ) 
+	WHERE  rNum >=#{start} and rNum<=#{end}
+	]]>
+	</select>
+	
+	<update id="commonOrderUpdate" parameterType="java.util.Map" >
+	UPDATE ordering SET STATUS = #{status} WHERE orderNum=#{orderNum}
+	</update>
+	
+	<update id="deliverPro" parameterType="java.util.Map">
+	UPDATE ordering SET STATUS = 2, DELIVER=#{deliver} WHERE ordernum=#{orderNum}
+	</update>
+	
+	<update id="changeOrdered" parameterType="java.util.Map" >
+	UPDATE ordering SET STATUS = 3, completeDate= sysdate WHERE ordernum=#{orderNum}
+	</update>
+</mapper>
