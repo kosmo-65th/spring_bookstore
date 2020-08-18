@@ -17,7 +17,7 @@ function loginCheck(){
 }
 function buyFunction(){
 	if(sumitCheck()==false)return false;
-	document.detailForm.action = "guest/buyBook";
+	document.detailForm.action = "${path}/guest/buyBook";
 	document.detailForm.submit();
 }
 function countCheck(){
@@ -54,7 +54,7 @@ function sumitCheck(){
 	<div id="container_member">
 		<div class="history_menu">
 			<ul>
-				<li class="home"><div><a href="main.do">HOME</a> <span> &gt; </span></div></li>
+				<li class="home"><div><a href="${path }/">HOME</a> <span> &gt; </span></div></li>
 				<li><div><strong>${book.getBookClassSet() }</strong> <span> &gt; </span></div></li>
 				<li><div><strong>${book.getBookClassKor() }</strong></div></li>
 			</ul>
@@ -69,7 +69,7 @@ function sumitCheck(){
 			<hr>
 		</div>
 		<div id="bookBody">
-			<form action="guest/shoppingCartPro" method="get" name="detailForm"> 
+			<form action="${path }/guest/shoppingCartPro" method="get" name="detailForm"> 
 			<div class="thumb"><span><a href="#"><img src="${image }${book.getBookImage() }" alt="" /></a></span></div>
 			<table>
 				<tr>

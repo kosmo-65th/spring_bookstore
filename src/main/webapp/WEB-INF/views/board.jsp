@@ -127,6 +127,5 @@
 		</fieldset>
 	</div><!-- 로그인 -->
 </div>
-<%@include file="../common/footer.jsp" %>
 </body>
 </html>

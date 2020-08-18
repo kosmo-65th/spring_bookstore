@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +68,7 @@ public class GuestController {
 	@RequestMapping("/user/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
+		SecurityContextHolder.clearContext();
 		
 		return "redirect:/";
 	}
@@ -166,6 +168,7 @@ public class GuestController {
 		return "guest/login";
 	}
 	
+	//권한 없을 때 가는 곳
 	@RequestMapping("/user/denied")
 	public String userDenied(HttpServletRequest req, Model model) {
 		String errMsg = (String)req.getAttribute("errMsg");
@@ -173,6 +176,7 @@ public class GuestController {
 		return "user/denied";
 	}
 	
+	//게시판
 	@RequestMapping("/guest/boardList")
 	public String boardList(HttpServletRequest req, Model model) {
 		guestService.boardList(req, model);

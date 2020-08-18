@@ -16,8 +16,11 @@
 	
 <%@include file="../common/top.jsp" %>
 <%@include file="../common/GNB_menu.jsp" %>
+
 </div>
 </section><!-- 머리(head) 종료 -->
+<div id="headSpace"></div>
+
 	<div class="contents_box">
 			<table width="100%" cellpadding="0" cellspacing="0" class="board_list">
 				<colgroup>

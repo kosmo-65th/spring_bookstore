@@ -81,8 +81,8 @@
                 <div id="messageBox">
                 <c:forEach var = "message" items="${messageList }">
                 	<c:choose>
-                		
-                		<c:when test='${fn:contains("${message.message}", "회원가입") }'>
+                		 
+                		<c:when test='${fn:contains(message.message, "회원가입") }'>
                 <div id='${message.num }'>
                 	<a class="dropdown-item d-flex align-items-center"  href="javascript:void(0)" onClick="deleteMessage(${message.num });">
 	                  <div class="mr-3">
@@ -99,7 +99,7 @@
 	                </a>
 	              </div>
 	              		</c:when>
-	              		<c:when test="${fn:contains('${message.message}', '구매') }">
+	              		<c:when test="${fn:contains(message.message, '구매') }">
 	              		<div id='${message.num }'>
                 	<a class="dropdown-item d-flex align-items-center"  href="javascript:void(0)" onClick="deleteMessage(${message.num });">
 	                  <div class="mr-3">
@@ -117,8 +117,6 @@
 	              		
 	              		</c:when>
 	              		<c:otherwise>
-	              		<span>${fn:contains('${message.message}', "회원가입") } 회원가입</span>
-	              		<span>${fn:indexOf("${message.message}", "구매") } 구매</span>
 	              		<div id='${message.num }'>
                 	<a class="dropdown-item d-flex align-items-center"  href="javascript:void(0)" onClick="deleteMessage(${message.num });">
 	                  <div class="mr-3">
