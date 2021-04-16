@@ -3,8 +3,8 @@
 **Source**
 
 - https://github.com/swhan9404/spring_project4 (public)
-- https://github.com/swhan9404/spring_crawling(크롤링 부분)
-- https://swhan9404.github.io/bookStoreVer2/project/main.html(디자인만 확인할 수 있음)
+- https://github.com/swhan9404/spring_crawling  (크롤링 부분)
+- https://swhan9404.github.io/bookStoreVer2/project/main.html   (디자인만 확인할 수 있음)
 
 :pencil:[PPT -JSP 뼈대](https://drive.google.com/file/d/1LmT3BaNgOo3oQ0VSeWLQdSiX1ejnO3DU/view?usp=sharing)   :pencil:[PPT - spring](https://drive.google.com/file/d/1Lf4f-EqKZtxM4PrFXo273OsJSzHFuset/view?usp=sharing)
 
